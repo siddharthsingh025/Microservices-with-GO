@@ -158,6 +158,17 @@ _go starts a goroutine, which is managed by golang run-time. read here more :-> 
  
 	tc, _ := context.WithTimeout(context.Background(), 30*time.Second)
 	s.Shutdown(tc)
+	
+	
+
+
+## # Building RESTfull services using Go :
+
+REST - stands for Represntational state transfer , so its an Architechtural pattern , one of the most commonly used .
+
+### Lest convert our perious application to REST full : v1.0 -> v2.0 
+	
+	
 
 
 
