@@ -103,6 +103,10 @@ than register our handler on it ._
         http.ListenAndServe(":9090", sm)
     }
 
+
+### we can creating own server :
+- its has serval properties : check on Go doc. [ https://pkg.go.dev/net/http#Server ]
+
       
         
         
