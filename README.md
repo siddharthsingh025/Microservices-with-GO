@@ -6,7 +6,7 @@
    </a>
 </p> 
 
-## Basics of API develpment with Go [ REST ]
+## `Basics of API develpment with Go [ REST ]`
 
 ListenAndServe - establize http  server with port for serving and handlerFunction to handle coming request 
 
