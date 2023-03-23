@@ -2,6 +2,7 @@ package handler
 
 import (
 	"encoding/json"
+	"example/learn0/data"
 	"log"
 	"net/http"
 )
@@ -14,11 +15,10 @@ func NewProduct(l *log.Logger) *Product {
 	return &Product{l}
 }
 
-func (p *Product) serveHttp(w http.ResponseWriter, r *http.Request) {
-
+func (p *Product) ServeHTTP(w http.ResponseWriter, r *http.Request) {
 	//Encoding to json
 
-	lp := data.getProduct()
+	lp := data.GetProduct()
 	d, err := json.Marshal(lp)
 	if err != nil {
 		http.Error(w, "Unable to encode to jason", http.StatusInternalServerError)
@@ -26,5 +26,4 @@ func (p *Product) serveHttp(w http.ResponseWriter, r *http.Request) {
 
 	// send back with respone
 	w.Write(d)
-
 }

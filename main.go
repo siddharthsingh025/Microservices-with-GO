@@ -14,12 +14,13 @@ import (
 func main() {
 
 	l := log.New(os.Stdout, "product-api", log.LstdFlags)
-	hl := handler.NewHello(l) // that will creat Hello object with l loger
-	//hl is our handler object with servehttp func act as handlerfunc
+
+	ph := handler.NewProduct(l) // that will creat Product handler object with l loger
+	//ph is our handler object with servehttp func act as handlerfunc
 
 	//here we define new serverMUX and than register our above handler to it.
 	sm := http.NewServeMux()
-	sm.Handle("/", hl)
+	sm.Handle("/", ph)
 
 	//creating our own server , for tutining our application for better performance
 	s := http.Server{
