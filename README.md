@@ -114,6 +114,34 @@ _use struct tags to add annotation to your productlist for better output_ :
 	
 <img width="432" alt="Screenshot 2023-03-24 at 1 04 00 AM" src="https://user-images.githubusercontent.com/87073574/227330123-c801a92a-e044-447c-a121-f40625482a02.png">
 
+	" as we know we use json.Marshal to encode our jason data but while using this we alocated memory and which make it slower , 
+  	so what we do - go has json.encoder() that is very fast and encode the data and write to response directly "
+
+_lets add encoding and writing logic to product in data package_ :
+	
+	func (p *Products) ToJson(w io.Writer)error {
+	//defining encoder
+	e := json.NewEncoder(w)
+
+	//pass our product list to encoder to write
+	return e.Encode(p)
+	}
+	
+_change GetProducts() signature to return our new custom type Products_ : 
+
+	func GetProduct() Products {
+	return productList
+	}
+
+_call ToJson() in main_ :
+	
+	//Encoding to json
+	lp := data.GetProduct()
+	// d, err := json.Marshal(lp)
+	err := lp.ToJson(w)
+
+	
+
 	
 	
 	
