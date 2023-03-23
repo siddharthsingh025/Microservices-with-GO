@@ -166,7 +166,9 @@ _go starts a goroutine, which is managed by golang run-time. read here more :-> 
 
 REST - stands for Represntational state transfer , so its an Architechtural pattern , one of the most commonly used .
 
-### Lest convert our perious application to REST full : v1.0 -> v2.0 
+### Lest convert our perious application to REST full : v1.0 -> v2.0 😄
+
+## 🌟 You can see updates on branch v2.0 : go and check 🌟 
 	
 	
 
