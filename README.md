@@ -58,6 +58,10 @@ Data :
 
 here we are firse encode the product list into JSON and tha pass to response of handler -> 
 
+		
+		note : A utility package is supposed to provide some variables to a package who imports it. Like export syntax in JavaScript, Go exports a variable if a variable name starts with Uppercase. All other variables not starting with an uppercase letter is private to the package.
+
+
 _Creating handler_ : 
 	
 	
