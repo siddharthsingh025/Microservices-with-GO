@@ -10,7 +10,7 @@ _"kjfkdsfksdjjfsdf"_
 
 #### Lets get Start : 
 
-1. Creat data package with list of products (for  now we are not using data base ) :
+**1. Creat data package with list of products (for  now we are not using data base ) :**
 
 Data : 
 
@@ -52,6 +52,16 @@ Data :
 				UpdatedOn:   time.Now().UTC().String(),
 			},
 		}
+		
+
+**2. Creat new handler for GET request to send whole product list in response as JSON format :**
+
+here we are firse encode the product list into JSON and tha pass to response of handler -> 
+
+_Creating handler_ : 
+	
+	
+	
 
 	
 	
