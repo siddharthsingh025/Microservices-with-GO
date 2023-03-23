@@ -16,11 +16,6 @@ Data :
 
  -> products.go : 
   
-  		
-		package data
-
-		import "time"
-
 		type Product struct {
 			ID          int
 			Name        string
@@ -59,10 +54,67 @@ Data :
 here we are firse encode the product list into JSON and tha pass to response of handler -> 
 
 		
-		note : A utility package is supposed to provide some variables to a package who imports it. Like export syntax in JavaScript, Go exports a variable if a variable name starts with Uppercase. All other variables not starting with an uppercase letter is private to the package.
+	🌟 note : 🌟
+	A utility package is supposed to provide some variables to a package who imports it.
+	Like export syntax in JavaScript, Go exports a variable if a variable name starts with Uppercase. 
+	All other variables not starting with an uppercase letter is private to the package.
+		
+	Read more about packaging : https://medium.com/rungo/everything-you-need-to-know-about-packages-in-go-b8bac62b74cc
 
 
 _Creating handler_ : 
+
+
+		type Product struct {
+			l *log.Logger
+		}
+
+		func NewProduct(l *log.Logger) *Product {
+			return &Product{l}
+		}
+
+		func (p *Product) ServeHTTP(w http.ResponseWriter, r *http.Request) {
+			//Encoding to json
+
+			lp := data.GetProduct()
+			d, err := json.Marshal(lp)
+			if err != nil {
+				http.Error(w, "Unable to encode to jason", http.StatusInternalServerError)
+			}
+
+			// send back with respone
+			w.Write(d)
+		}
+
+
+_Registering our handler to our ServerMux in main.go file_ : 
+	
+	ph := handler.NewProduct(l)    // that will creat Product handler object with l loger
+	                               //ph is our handler object with servehttp func act as handlerfunc
+
+	//here we define new serverMUX and than register our above handler to it.
+	
+	sm := http.NewServeMux()
+	sm.Handle("/", ph) 
+
+_run command to get productlist from our running server_ : 
+	
+	curl localhost:9090 | jq
+
+**output**
+
+<img width="598" alt="Screenshot 2023-03-24 at 12 56 54 AM" src="https://user-images.githubusercontent.com/87073574/227327343-d7ef70d3-b841-47fc-af70-c2395f11b237.png">
+
+
+_use struct tags to add annotation to your productlist for better output_ :
+
+<img width="494" alt="Screenshot 2023-03-24 at 1 04 38 AM" src="https://user-images.githubusercontent.com/87073574/227330390-b17b4813-151e-4e44-82d8-5fecfe83af12.png">
+
+**change in output :**
+	
+<img width="432" alt="Screenshot 2023-03-24 at 1 04 00 AM" src="https://user-images.githubusercontent.com/87073574/227330123-c801a92a-e044-447c-a121-f40625482a02.png">
+
+	
 	
 	
 	
