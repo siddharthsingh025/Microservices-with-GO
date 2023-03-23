@@ -133,12 +133,46 @@ _change GetProducts() signature to return our new custom type Products_ :
 	return productList
 	}
 
-_call ToJson() in main_ :
+_call ToJson() in product handler :
 	
 	//Encoding to json
 	lp := data.GetProduct()
 	// d, err := json.Marshal(lp)
 	err := lp.ToJson(w)
+	
+
+_Now we want to handle defferent http request like GET , POST etc 
+so we define logic in serveHTTP() in product handler and add some internal functions_ : 
+	
+	func (p *Product) ServeHTTP(w http.ResponseWriter, r *http.Request) {
+
+	if r.Method == http.MethodGet {
+		p.getProducts(w, r)
+		return
+	}
+
+	//otherwise//
+	w.WriteHeader(http.StatusMethodNotAllowed)
+
+	}
+
+	func (p *Product) getProducts(w http.ResponseWriter, r *http.Request) {
+	       //Encoding to json
+		lp := data.GetProduct()
+		// d, err := json.Marshal(lp)
+		err := lp.ToJson(w)
+
+		if err != nil {
+			http.Error(w, "Unable to encode to jason", http.StatusInternalServerError)
+		}
+	}
+
+_-If your now trying to make request other than GET you get   ->_ 😮
+
+<img width="1215" alt="Screenshot 2023-03-24 at 1 54 41 AM" src="https://user-images.githubusercontent.com/87073574/227344783-cf7c2590-97d9-4efb-8961-e2d5f1297472.png">
+
+	
+	
 
 	
 
