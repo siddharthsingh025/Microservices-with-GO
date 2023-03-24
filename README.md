@@ -1,12 +1,11 @@
-# # Microservices-with-GO
+# # Devloping Basic Server :
  <p align="center">
    <a>
-   <img height="300" width="400" src="https://github.com/siddharthsingh025/Microservices-with-GO/blob/main/imgs/micro.png">
-   <img height="300" width="200" src="https://github.com/siddharthsingh025/Microservices-with-GO/blob/main/imgs/golang.png">
+   <img height="500" width="650" src="https://github.com/siddharthsingh025/Microservices-with-GO/blob/v1.0/imgs/Dedicated%20hosting.png">
    </a>
 </p> 
 
-## `#Basics of API develpment with Go [ REST ]`
+## `#Basics of API develpment with Go`
 
 ListenAndServe - establize http  server with port for serving and handlerFunction to handle coming request 
 
@@ -34,7 +33,7 @@ ServeMux - that register a path to and handler
                          return   
                 }
 
-## #Implimenting Handler using classes as separate package
+## # Implimenting Handler using classes as separate package
 ### -handler package with hello.go file : 
 
       package handler
@@ -125,7 +124,7 @@ than register our handler on it ._
         
 
 
-### #granular shutdown ( first complete all task and than get cuttoff with client )
+### # granular shutdown ( first complete all task and than get cuttoff with client )
 #### ▶️ use of goroutines ( go - keyword ) : 
 _go starts a goroutine, which is managed by golang run-time. read here more :-> https://www.golang-book.com/books/intro/10_
      
@@ -133,7 +132,10 @@ _go starts a goroutine, which is managed by golang run-time. read here more :-> 
       
       💡//handle my listenAndServe so that it not gonna block
 	    go func() { // calls goroutines
-	   	   err := s.ListenAndServe()
+	   	  fmt.Println("\n Starting The Server ....\n")
+		time.Sleep(2 * time.Second)
+		fmt.Println("\n $ ACTIVATED $\n")
+		err := s.ListenAndServe()
    	   	if err != nill {
 	       		l.Fatal(err)
 	            	}
@@ -160,13 +162,11 @@ _go starts a goroutine, which is managed by golang run-time. read here more :-> 
 	s.Shutdown(tc)
 	
 	
+<img width="361" alt="Screenshot 2023-03-24 at 7 16 23 PM" src="https://user-images.githubusercontent.com/87073574/227538135-f950329c-fe1d-4170-bf2f-689f7bccfef2.png">
 
+	
 
-## # Building RESTfull services using Go :
-
-REST - stands for Represntational state transfer , so its an Architechtural pattern , one of the most commonly used .
-
-### Lest convert our perious application to REST full : v1.0 -> v2.0 
+### Lest convert our  application to REST full : v1.0 -> v2.0  checkout
 	
 	
 
