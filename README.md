@@ -177,11 +177,17 @@ now send post request to our server with some json data
         }
 
 
-# lets try to update some data 
+### Lets try to update some data 
 
 - client side : PUT request 
-    
-    curl -v  localhost:9090/4 -XPUT -d '{ "name" : "black  tea" , "description" : "high cafeen"}' | jq
+
+      
+      curl -v  localhost:9090/4 -XPUT -d '{ "name" : "black  tea" , "description" : "high cafeen"}' | jq
+      
+<img width="946" alt="Screenshot 2023-03-24 at 6 42 13 PM" src="https://user-images.githubusercontent.com/87073574/227530311-204f5c76-3cee-49ef-a4b0-aa351adb2c47.png">
+
+
+
 
 
     
