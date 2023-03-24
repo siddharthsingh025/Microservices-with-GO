@@ -78,6 +78,17 @@ now send post request to our server with some json data
 
 <img width="616" alt="Screenshot 2023-03-24 at 2 11 50 PM" src="https://user-images.githubusercontent.com/87073574/227468524-1628cc9a-32fe-4f89-9585-a6deba57a766.png">
 
+
+### For implementing PUT ( update ) method 
+-for that we have to  add logic to ServeHttp() where we haveto extract ID from URL from client Request 
+  and for extracting we use FindAllStringSubmatch() form  Regexp package : for more about it read :   
+  
+  https://cs.opensource.google/go/go/+/go1.20.2:src/regexp/regexp.go;l=1197 
+  
+  
+
+
+
         
   
   
