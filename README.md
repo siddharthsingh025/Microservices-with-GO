@@ -12,7 +12,7 @@ _"kjfkdsfksdjjfsdf"_
 
 - now for REST full approach what you'r going to be doing is using HTTP verbs { like PUT , GET , POST , etc. }
 
-▶️ Lets impliment a **POST** to be able to add a new product $  
+### ▶️ Lets impliment a **POST** to be able to add a new product $  
   
     " now here we have to do opposite of GET request , we have to decode request Body ( actually a io.writter )
       that is in Json format into our Database store format
@@ -79,7 +79,7 @@ now send post request to our server with some json data
 <img width="616" alt="Screenshot 2023-03-24 at 2 11 50 PM" src="https://user-images.githubusercontent.com/87073574/227468524-1628cc9a-32fe-4f89-9585-a6deba57a766.png">
 
 
-### For implementing PUT ( update ) method 
+### ▶️ For implementing PUT ( update ) method 
 -for that we have to  add logic to ServeHttp() where we haveto extract ID from URL from client Request 
   and for extracting we use FindAllStringSubmatch() form  Regexp package : for more about it read :   
   
@@ -177,7 +177,7 @@ now send post request to our server with some json data
         }
 
 
-### Lets try to update some data 
+#### Lets try to update some data 
 
 - client side : PUT request 
 
