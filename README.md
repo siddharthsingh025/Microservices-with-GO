@@ -1,7 +1,7 @@
 # # Microservices-with-GO
  <p align="center">
    <a>
-   <img height="400" width="700" src="https://github.com/siddharthsingh025/Microservices-with-GO/blob/main/imgs/micro.png">
+   <img height="400" width="650" src="https://github.com/siddharthsingh025/Microservices-with-GO/blob/main/imgs/micro.png">
    <img height="200" width="200" src="https://github.com/siddharthsingh025/Microservices-with-GO/blob/main/imgs/golang.png">
    </a>
 </p> 
