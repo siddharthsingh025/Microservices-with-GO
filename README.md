@@ -85,6 +85,107 @@ now send post request to our server with some json data
   
   https://cs.opensource.google/go/go/+/go1.20.2:src/regexp/regexp.go;l=1197 
   
+  1. Add logic for PUT in serveHTTP() :
+      
+            if r.Method == http.MethodPut {
+          p.l.Println("PUT", r.URL.Path)
+
+          // read more about regexp - https://cs.opensource.google/go/go/+/go1.20.2:src/regexp/regexp.go;l=1197
+          //expect the id in the URI
+          reg := regexp.MustCompile(`/([0-9]+)`)
+          g := reg.FindAllStringSubmatch(r.URL.Path, -1)
+
+          if len(g) != 1 {
+            p.l.Println("Invalid URI more than one id ")
+            http.Error(w, "Invalid URI", http.StatusBadRequest)
+            return
+          }
+
+          if len(g[0]) != 2 {
+            p.l.Println("Invalid URI more than one capture group ")
+            http.Error(w, "Invalid URI", http.StatusBadRequest)
+            return
+          }
+
+          idString := g[0][1]
+
+          id, err := strconv.Atoi(idString) // convert string id to integer
+
+          if err != nil {
+            p.l.Println("Invalid URI unable to convert to number ", idString)
+            http.Error(w, "Invalid URI", http.StatusBadRequest)
+            return
+          }
+
+          // p.l.Println("got id := ", id)
+
+          p.updateProduct(id, w , r )
+            }
+  
+  2. Add  updateProduct() for handling above logic 
+
+        
+            func (p Products) updateProduct(id int ,w http.ResponseWriter, r *http.Request){
+
+               p.l.Println("Handle PUT Products")
+              pdt := &data.Product{}
+
+             err := pdt.FromJson(r.Body) // we call FromJson func of Product and pass body of post request we got
+             if err != nil {
+              http.Error(w, "Unable to unmarshall json", http.StatusBadRequest)
+           }
+
+            err = data.UpdateProduct(id,pdt)
+              if err == data.ErrProductNotFound{
+                http.Error(w ,"Product not found", http.StatusBadRequest)
+                return
+              }
+
+              if err != nil{
+                http.Error(w ,"Product not found", http.StatusInternalServerError)
+                return
+              }           
+           
+           }
+           
+ 3. Add two functions in products.go of data packg :
+
+    
+        var ErrProductNotFound = fmt.Errorf("Product not found")
+
+        // to find product in our database list by id
+        func findProduct(id int) (*Product, int, error) {
+          for i, p := range productList {
+            if p.ID == id {
+              return p, i, nil
+            }
+          }
+
+          return nil,-1 , ErrProductNotFound
+        }
+
+
+        func UpdateProduct(id int, p *Product) error {
+          _, pos, err := findProduct(id)
+          if err != nil {
+            return err
+          }
+          p.Id = id
+          productList[pos] = p
+          return nil
+
+        }
+
+
+# lets try to update some data 
+
+- client side : PUT request 
+    
+    curl -v  localhost:9090/4 -XPUT -d '{ "name" : "black  tea" , "description" : "high cafeen"}' | jq
+
+
+    
+        
   
 
 
