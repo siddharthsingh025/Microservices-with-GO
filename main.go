@@ -9,6 +9,8 @@ import (
 	"os"
 	"os/signal"
 	"time"
+
+	"github.com/gorilla/mux"
 )
 
 func main() {
@@ -18,9 +20,24 @@ func main() {
 	ph := handler.NewProduct(l) // that will creat Product handler object with l loger
 	//ph is our handler object with servehttp func act as handlerfunc
 
-	//here we define new serverMUX and than register our above handler to it.
-	sm := http.NewServeMux()
-	sm.Handle("/", ph)
+	//here we define new Router using gorilla mux
+	sm := mux.NewRouter()
+
+	//GET request
+	getRouter := sm.Methods(http.MethodGet).Subrouter() // methods registers a new route with matcher for HTTP methods
+	getRouter.HandleFunc("/", ph.GetProducts)
+
+	//PUT request
+	getRouter = sm.Methods(http.MethodPut).Subrouter()
+	getRouter.HandleFunc("/{id:[0-9]+}", ph.UpdateProducts)
+	//this is how we define above is regexp for extrcting id form URI
+
+	//POST request
+	getRouter = sm.Methods(http.MethodPost).Subrouter()
+	getRouter.HandleFunc("/", ph.AddProducts)
+	//this is how we define above is regexp for extrcting id form URI
+
+	// sm.Handle("/", ph)
 
 	//creating our own server , for tutining our application for better performance
 	s := http.Server{
