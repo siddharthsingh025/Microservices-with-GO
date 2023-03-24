@@ -33,6 +33,9 @@ func main() {
 
 	//handle my listenAndServe so that it not gonna block
 	go func() { // calls goroutines
+		fmt.Println("\n Starting The Server ....\n")
+		time.Sleep(2 * time.Second)
+		fmt.Println("\n $ ACTIVATED $\n")
 		err := s.ListenAndServe()
 		if err != nil {
 			l.Fatal(err)

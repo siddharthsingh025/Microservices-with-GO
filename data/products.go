@@ -2,6 +2,7 @@ package data
 
 import (
 	"encoding/json"
+	"fmt"
 	"io"
 	"time"
 )
@@ -17,8 +18,23 @@ type Product struct {
 	DeletedOn   string  `json:"-"`
 }
 
+//here as a function parameter we get body of post request with our json content
+//and we decode it to structure of our Product struct
+
+func (p *Product) FromJson(r io.Reader) error {
+	// defining decoder
+	e := json.NewDecoder(r)
+
+	// return decoded data to structure of Products type
+	return e.Decode(p)
+}
+
 type Products []*Product
 
+// ToJson serializes the contents of the collection to JSON
+// NewEncoder provides better performance than json.Unmarshal as it does not
+// have to buffer the output into an im memory slice of bytes
+// this reduces allocations and the overheads of the service
 func (p *Products) ToJson(w io.Writer) error {
 	//defining encoder
 	e := json.NewEncoder(w)
@@ -27,9 +43,46 @@ func (p *Products) ToJson(w io.Writer) error {
 	return e.Encode(p)
 }
 
+// fumnction to generate integer for our ID
+func getNextID() int {
+	lp := productList[len(productList)-1]
+	return lp.ID + 1 // increment by 1 of Last product Id in the list
+}
+
+var ErrProductNotFound = fmt.Errorf("Product not found")
+
+// to find product in our database list by id
+func findProduct(id int) (*Product, int, error) {
+	for i, p := range productList {
+		if p.ID == id {
+			return p, i, nil
+		}
+	}
+
+	return nil, -1, ErrProductNotFound
+}
+
 // change GetProduct to return our  custom type of Products
 func GetProduct() Products {
 	return productList
+}
+
+// add new product to our static list
+func AddProduct(p *Product) {
+	p.ID = getNextID()
+	productList = append(productList, p) // appended our new Product structured data to our existing List
+}
+
+func UpdateProduct(id int, p *Product) error {
+
+	_, pos, err := findProduct(id)
+	if err != nil {
+		return err
+	}
+	p.ID = id
+	productList[pos] = p
+	return nil
+
 }
 
 // static list of products
