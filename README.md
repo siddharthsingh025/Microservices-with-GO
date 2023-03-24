@@ -270,6 +270,10 @@ _use struct tags to add annotation to your productlist for better output_ :
 
 	" as we know we use json.Marshal to encode our jason data but while using this we alocated memory and which make it slower , 
   	so what we do - go has json.encoder() that is very fast and encode the data and write to response directly "
+ _
+
+	" ToJson serializes the contents of the collection to JSON NewEncoder provides better performance than json.Unmarshal as it
+	  does not have to buffer the output into an im memory slice of bytes this reduces allocations and the overheads of the service "
 
 _lets add encoding and writing logic to product in data package_ :
 	
