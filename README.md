@@ -97,8 +97,63 @@
                 }
 
 
-### Refactoring done using gorilla mux  
+#### Refactoring done using gorilla mux  
     
+### ▶️ Introducing MiddleWare : 
+    
+    " helps to validate request  :
+                                   that request comes in to the server , its get pickedup by the router and router check the method and send to 
+                                   subrouter then before executing function in subrouter , middleware will comes into the picture and 
+                                   execute before that and validate our request accordingly "
+                                   
+
+      
+- I have created it in product.go handler :
+      
+              type KeyProduct struct{}
+
+              func (p Product) MiddlewxareProductValidation(next http.Handler) http.Handler {
+                return http.HandlerFunc(func(w http.ResponseWriter, r *http.Request) {
+
+                  pdt := data.Product{}
+
+                  err := pdt.FromJson(r.Body) // we call FromJson func of Product and pass body of post request we got
+                  if err != nil {
+                    p.l.Println("[ERROR] deseializing product", err)
+                    http.Error(w, "Unable to unmarshall json", http.StatusBadRequest)
+                    return
+                  }
+
+                  //add the product (pdt) to the context
+                  ctx := context.WithValue(r.Context(), KeyProduct{}, pdt)
+                  req := r.WithContext(ctx)
+
+                  //call the handler , which can be another middleware in the chain , or the final handler
+                  next.ServeHTTP(w, req)
+                })
+              }
+      
+      
+- now extract converted json data from context anywhere you want like : 
+        
+                pdt := r.Context().Value(KeyProduct{}).(data.Product) //getting product from context
+                
+ - call using USE() with router  , by which it will first go to middleware and write converted data to context [ main.go ]
+        
+                //PUT request
+                  putRouter := sm.Methods(http.MethodPut).Subrouter()
+                  putRouter.HandleFunc("/{id:[0-9]+}", ph.UpdateProducts)
+                  //this is how we define above is regexp for extrcting id form URI
+                  putRouter.Use(ph.MiddlewxareProductValidation)
+
+                  //POST request
+                  postRouter := sm.Methods(http.MethodPost).Subrouter()
+                  postRouter.HandleFunc("/", ph.AddProducts)
+                  //this is how we define above is regexp for extrcting id form URI
+                  postRouter.Use(ph.MiddlewxareProductValidation)
+        
+        
+      
 
 
 
