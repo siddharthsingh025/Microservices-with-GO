@@ -151,7 +151,11 @@
                   postRouter.HandleFunc("/", ph.AddProducts)
                   //this is how we define above is regexp for extrcting id form URI
                   postRouter.Use(ph.MiddlewxareProductValidation)
-        
+                  
+                  
+
+
+          
         
       
 
