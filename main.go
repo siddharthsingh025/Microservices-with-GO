@@ -28,14 +28,16 @@ func main() {
 	getRouter.HandleFunc("/", ph.GetProducts)
 
 	//PUT request
-	getRouter = sm.Methods(http.MethodPut).Subrouter()
-	getRouter.HandleFunc("/{id:[0-9]+}", ph.UpdateProducts)
+	putRouter := sm.Methods(http.MethodPut).Subrouter()
+	putRouter.HandleFunc("/{id:[0-9]+}", ph.UpdateProducts)
 	//this is how we define above is regexp for extrcting id form URI
+	putRouter.Use(ph.MiddlewxareProductValidation)
 
 	//POST request
-	getRouter = sm.Methods(http.MethodPost).Subrouter()
-	getRouter.HandleFunc("/", ph.AddProducts)
+	postRouter := sm.Methods(http.MethodPost).Subrouter()
+	postRouter.HandleFunc("/", ph.AddProducts)
 	//this is how we define above is regexp for extrcting id form URI
+	postRouter.Use(ph.MiddlewxareProductValidation)
 
 	// sm.Handle("/", ph)
 

@@ -1,6 +1,7 @@
 package handler
 
 import (
+	"context"
 	"example/learn0/data"
 	"log"
 	"net/http"
@@ -35,15 +36,11 @@ func (p *Product) GetProducts(w http.ResponseWriter, r *http.Request) {
 func (p *Product) AddProducts(w http.ResponseWriter, r *http.Request) {
 
 	p.l.Println("Handle POST Products")
-	pdt := &data.Product{}
-	err := pdt.FromJson(r.Body) // we call FromJson func of Product and pass body of post request we got
-	if err != nil {
-		http.Error(w, "Unable to unmarshall json", http.StatusBadRequest)
-	}
+	pdt := r.Context().Value(KeyProduct{}).(data.Product) //getting product from context
 
 	p.l.Printf("product : %#v", pdt) // it will print decoded data into nice format in logWindow
 
-	data.AddProduct(pdt) // call func to add decoded data in list
+	data.AddProduct(&pdt) // call func to add decoded data in list
 }
 
 // for PUT req
@@ -54,17 +51,13 @@ func (p Product) UpdateProducts(w http.ResponseWriter, r *http.Request) {
 
 	if err != nil {
 		http.Error(w, "enable to convert id", http.StatusBadRequest)
+		return
 	}
 
 	p.l.Println("Handle PUT Products", id)
-	pdt := &data.Product{}
+	pdt := r.Context().Value(KeyProduct{}).(data.Product) // getting our decoded json data from request context and cast it into Product type
 
-	err = pdt.FromJson(r.Body) // we call FromJson func of Product and pass body of post request we got
-	if err != nil {
-		http.Error(w, "Unable to unmarshall json", http.StatusBadRequest)
-	}
-
-	err = data.UpdateProduct(id, pdt)
+	err = data.UpdateProduct(id, &pdt)
 	if err == data.ErrProductNotFound {
 		http.Error(w, "Product not found", http.StatusBadRequest)
 		return
@@ -74,4 +67,29 @@ func (p Product) UpdateProducts(w http.ResponseWriter, r *http.Request) {
 		http.Error(w, "Product not found", http.StatusInternalServerError)
 		return
 	}
+}
+
+//creating MiddleWare for validation our request
+
+type KeyProduct struct{}
+
+func (p Product) MiddlewxareProductValidation(next http.Handler) http.Handler {
+	return http.HandlerFunc(func(w http.ResponseWriter, r *http.Request) {
+
+		pdt := data.Product{}
+
+		err := pdt.FromJson(r.Body) // we call FromJson func of Product and pass body of post request we got
+		if err != nil {
+			p.l.Println("[ERROR] deseializing product", err)
+			http.Error(w, "Unable to unmarshall json", http.StatusBadRequest)
+			return
+		}
+
+		//add the product (pdt) to the context
+		ctx := context.WithValue(r.Context(), KeyProduct{}, pdt)
+		req := r.WithContext(ctx)
+
+		//call the handler , which can be another middleware in the chain , or the final handler
+		next.ServeHTTP(w, req)
+	})
 }
